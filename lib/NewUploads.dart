@@ -224,6 +224,7 @@ class _NewUploadsState extends State<NewUploads> {
           hashtag: list[i]['hashtag'],
           likes: list[i]['likes'],
           docid:list[i]['docid'],
+          name: list[i]['user'],
           dislikes: list[i]['dislikes'],
           length: list[i]['length'],
           views: list[i]['views'],

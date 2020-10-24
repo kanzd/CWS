@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Videos {
   String title;
   String docid = '';
@@ -26,6 +28,7 @@ class Videos {
     var doc2 = firestore.doc(this.docid);
     var docdata = await doc.get();
     var doc2data = await doc2.get();
+
     var data = docdata.data()[title + time.toString()];
     if (data == null) {
       var storage = FirebaseStorage.instance
@@ -46,7 +49,7 @@ class Videos {
         time.toString().split('.')[0]: {
           'videouri': await uploadref.ref.getDownloadURL(),
           'thumbnail': await uploadref2.ref.getDownloadURL(),
-          'user': this.user,
+          'user': doc2data.data()['name'],
           'likes': 0,
           'title': title,
           'hashtag': hashtag,
@@ -60,13 +63,14 @@ class Videos {
         }
       });
       var videos = doc2data.data()['videos'];
-      videos[DateTime.now().toString().split('.')[0]] = {
+      videos[time.toString().split('.')[0]] = {
         'thumbnail': await uploadref2.ref.getDownloadURL(),
         'videouri': await uploadref.ref.getDownloadURL(),
         'likes': 0,
         'dislikes': 0,
         'hashtag': hashtag,
         'title': title,
+        'user': doc2data.data()['name'],
         'comments': 0,
         'views': 0,
         'type': type,
@@ -81,6 +85,7 @@ class Videos {
         video: await uploadref.ref.getDownloadURL(),
         time: time,
         length: length,
+        name: doc2data.data()['name'],
         docid: docid,
         type: type,
       );
@@ -96,6 +101,7 @@ class Videos {
       DateTime time,
       thumbnail,
       video,
+      String name,
       length,
       String docid,
       String type}) async {
@@ -125,6 +131,7 @@ class Videos {
         'dislikes': 0,
         'hashtag': hashtag,
         'title': title,
+        'user': name,
         'comments': 0,
         'views': 0,
         'type': type,
@@ -191,7 +198,7 @@ class Videos {
       for (var i in ls) {
         videos.add(temp[i]);
       }
-      return [true, videos,ls];
+      return [true, videos, ls];
     } else {
       doc = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
       var data = await doc.get();
@@ -264,6 +271,8 @@ class Videos {
       'following': data['following-name']
     };
   }
+
+ 
 
   getData([docid]) async {
     await Firebase.initializeApp();

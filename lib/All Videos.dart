@@ -214,6 +214,7 @@ class _AllVideosState extends State<AllVideos> {
           video: list[i]['videouri'],
           title: list[i]['title'],
           commentlist: list[i]['commectL'],
+          name: list[i]['user'],
           type:list[i]['type'],
           hashtag: list[i]['hashtag'],
           likes: list[i]['likes'],

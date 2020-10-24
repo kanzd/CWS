@@ -142,6 +142,7 @@ class _VideoFeedState extends State<VideoFeed> {
     if (data[0]) {
       int count = 0;
       for (var i in data[1]) {
+        
         print(i);
         finallist.add(HomeVideoModel(
           title: i['title'],
@@ -151,6 +152,7 @@ class _VideoFeedState extends State<VideoFeed> {
           commentsL: i['commectL'],
           comments: i['comments'],
           docid: i['docid'],
+          name:i['user'],
           likes: i['likes'],
           type: i['type'],
           dislikes: i['dislikes'],
@@ -171,6 +173,7 @@ class _VideoFeedState extends State<VideoFeed> {
             thumbnail: data[1][i]['thumbnail'],
             video: data[1][i]['videouri'],
             key: i,
+            name:data[1][i]['user'],
             type: data[1][i]['type'],
             title: data[1][i]['title'],
             follows: data[1][i]['following-name'],

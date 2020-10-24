@@ -7,14 +7,15 @@ class HomeVideoModel {
   var commentsL;
   var title;
   var key;
- 
+  var name;
+  var type;
   var time;
   var length;
   var docid;
   var hashtag;
   var views;
   var follows;
-  var type;
+  
   HomeVideoModel(
       {var thumbnail,
       var video,
@@ -25,10 +26,11 @@ class HomeVideoModel {
       var likes,
       var comments,
       var key,
-      
       var time,
+      var name,
       var dislikes,
       var commentsL,
+   
       var length,
       var title,
       var views}) {
@@ -36,6 +38,7 @@ class HomeVideoModel {
     this.video = video;
     this.title = title;
     this.likes = likes;
+    this.name = name;
     this.comments = comments;
     this.dislikes = dislikes;
     this.key = key;

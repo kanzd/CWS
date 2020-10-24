@@ -6,6 +6,7 @@ class NewuploadModel {
   var time;
   var comments;
   var hashtag;
+  var name;
   var key;
   var follows;
   var length;
@@ -23,6 +24,7 @@ class NewuploadModel {
     var title,
     var dislikes,
     var follows,
+    var name,
     var hashtag,
     var length,
     var key,
@@ -39,6 +41,7 @@ class NewuploadModel {
     this.follows = follows;
     this.commentlist = commentlist;
     this.time = time;
+    this.name = name;
     this.key = key;
     this.title = title;
     this.hashtag = hashtag;

@@ -240,11 +240,13 @@ class _Upload_ScreenState extends State<Upload_Screen> {
                         setState(() {
                           load = true;
                         });
+                        
                         Toast.show('Uploading....', context, duration: 5);
                         await Videos(docid: pref.getStringList('your info')[3])
                             .uploadVideo(
                                 file: video,
                                 thumbnail: image,
+                                
                                 docid: pref.getStringList('your info')[3],
                                 time: DateTime.now(),
                                 type: type,

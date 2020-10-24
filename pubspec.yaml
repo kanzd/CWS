@@ -44,6 +44,7 @@ dependencies:
   hashtagable: ^1.0.3
   rflutter_alert: ^1.1.0
   flick_video_player: ^0.1.1
+  share_extend: "^1.1.9"
   
 
 

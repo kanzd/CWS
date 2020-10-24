@@ -47,6 +47,8 @@ class _TrendingFeedState extends State<TrendingFeed> {
             docid: data[i]['docid'],
             commentsL: data[i]['commectL'],
             likes: data[i]['likes'],
+            name: data[i]['user'],
+            type: data[i]['type'],
             dislikes: data[i]['dislikes'],
             length: data[i]['length'],
             views: data[i]['views'],
