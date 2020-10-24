@@ -140,7 +140,7 @@ class _VideoDetailState extends State<VideoDetail> {
         centerTitle: true,
         title: Text('Videos'),
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           _buildVideoPlayer(context),
           // Padding(
@@ -152,9 +152,9 @@ class _VideoDetailState extends State<VideoDetail> {
           //     ],
           //   ),
           // ),
-          Expanded(
-            child: ListView(
-              children: <Widget>[
+  
+          
+              
                 _videoInfo(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -268,9 +268,8 @@ class _VideoDetailState extends State<VideoDetail> {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+      
+       
     );
   }
 
