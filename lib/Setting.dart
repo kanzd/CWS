@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newapp1/Account.dart';
+import 'package:newapp1/genrealPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Login.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key key}) : super(key: key);
@@ -13,7 +18,10 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     List<Widget> _layouts = [
       SizedBox(height: 50),
-      Container(
+      FlatButton(onPressed: (){
+         Navigator.pushReplacement(
+              context, new MaterialPageRoute(builder: (context) =>GenPage()));
+      },child:Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
@@ -31,7 +39,7 @@ class _SettingState extends State<Setting> {
             ),
           ],
         ),
-      ),
+      )),
       SizedBox(height: 30),
       Container(
         padding: EdgeInsets.only(left: 25.0),
@@ -53,7 +61,10 @@ class _SettingState extends State<Setting> {
         ),
       ),
       SizedBox(height: 30),
-      Container(
+      FlatButton(onPressed: (){
+         Navigator.pushReplacement(
+              context, new MaterialPageRoute(builder: (context) => Account()));
+      },child:Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
@@ -71,7 +82,7 @@ class _SettingState extends State<Setting> {
             ),
           ],
         ),
-      ),
+      ),),
       SizedBox(height: 30),
       Container(
         padding: EdgeInsets.only(left: 25.0),
@@ -128,23 +139,33 @@ class _SettingState extends State<Setting> {
         ),
       ),
       SizedBox(height: 30),
-      Container(
-        padding: EdgeInsets.only(left: 25.0),
-        child: Row(
-          children: [
-            Image.asset(
-              'assets/images/Path 151.png',
-              height: 30,
-              width: 30,
-            ),
-            SizedBox(width: 20),
-            Text(
-              'Logout',
-              style: TextStyle(
-                fontSize: 18,
+      FlatButton(
+        onPressed: () async {
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          await pref.setBool('auth', false);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context, new MaterialPageRoute(builder: (context) => Login()));
+        },
+        child: Container(
+          padding: EdgeInsets.only(left: 25.0),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/Path 151.png',
+                height: 30,
+                width: 30,
               ),
-            ),
-          ],
+              SizedBox(width: 20),
+              Text(
+                'Logout',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ];

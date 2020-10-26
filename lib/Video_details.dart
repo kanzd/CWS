@@ -42,7 +42,7 @@ class _VideoDetailState extends State<VideoDetail> {
       iconcolor = Colors.blue[300];
     } else
       iconcolor = Colors.grey[500];
-     if (disdata != null) if (disdata.contains(widget.info.key)) {
+    if (disdata != null) if (disdata.contains(widget.info.key)) {
       iconcolord = Colors.blue[300];
     } else
       iconcolord = Colors.grey[500];
@@ -137,6 +137,14 @@ class _VideoDetailState extends State<VideoDetail> {
     if (!flag) check();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () async {
+            flickManager.flickControlManager.dispose();
+            print('done');
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_left),
+        ),
         centerTitle: true,
         title: Text('Videos'),
       ),
@@ -152,130 +160,124 @@ class _VideoDetailState extends State<VideoDetail> {
           //     ],
           //   ),
           // ),
-  
-          
-              
-                _videoInfo(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: Text(
-                      "${widget.info.title}",
-                      style: TextStyle(color: Colors.black54, fontSize: 15.0),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _listIcon(context),
-                ),
-                _line(),
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        height: 70,
-                        child: ListTile(
-                            leading: Image.asset('assets/images/Profile-1.png'),
-                            title: Text(
-                              '${widget.info.name}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${followno} Followers',
-                              style: TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                            trailing: FlatButton.icon(
-                              label: Text(
-                                this.follows,
-                                style: TextStyle(color: this.color),
-                              ),
-                              onPressed: () async {
-                                SharedPreferences pref =
-                                    await SharedPreferences.getInstance();
-                                Videos().updateFollowers(
-                                    info: widget.info,
-                                    perinfo: pref.getStringList('your info'),
-                                    function: (Map m1, Map m2, String value) {
-                                      if (value == 'follow') {
-                                        if (m1['followers-name'][m2['name']] ==
-                                            null) {
-                                          m1['followers']++;
-                                          m1['followers-name'][m2['name']] =
-                                              pref.getStringList(
-                                                  'your info')[3];
-                                          this.follows = 'Following';
-                                        } else {
-                                          m1['followers']--;
-                                          m1['followers-name'][m2['name']] =
-                                              null;
-                                          this.follows = 'Follow';
-                                        }
-                                      } else {
-                                        print(m1);
-                                        if (m1['following-name'][m2['name']] ==
-                                            null) {
-                                          m1['following ']++;
-                                          m1['following-name'][m2['name']] =
-                                              widget.docid;
-                                          this.follows = 'Following';
-                                        } else {
-                                          m1['following ']--;
-                                          m1['following-name'][m2['name']] =
-                                              null;
-                                          this.follows = 'Follow';
-                                        }
-                                      }
-                                      print('done');
-                                      setState(() {});
-                                      return m1;
-                                    });
-                              },
-                              icon: Icon(Icons.verified_user),
-                            ))),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Channel()),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 19, top: 8.0),
-                  child: Container(
-                    child: Text(
-                      'You May Also Like',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
-                  child: _dropDownList(),
-                ),
-              ],
+
+          _videoInfo(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: Text(
+                "${widget.info.title}",
+                style: TextStyle(color: Colors.black54, fontSize: 15.0),
+                textAlign: TextAlign.start,
+              ),
             ),
-      
-       
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _listIcon(context),
+          ),
+          _line(),
+          InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  height: 70,
+                  child: ListTile(
+                      leading: Image.asset('assets/images/Profile-1.png'),
+                      title: Text(
+                        '${widget.info.name}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${followno} Followers',
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
+                      trailing: FlatButton.icon(
+                        label: Text(
+                          this.follows,
+                          style: TextStyle(color: this.color),
+                        ),
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          Videos().updateFollowers(
+                              info: widget.info,
+                              perinfo: pref.getStringList('your info'),
+                              function: (Map m1, Map m2, String value) {
+                                if (value == 'follow') {
+                                  if (m1['followers-name'][m2['name']] ==
+                                      null) {
+                                    m1['followers']++;
+                                    m1['followers-name'][m2['name']] =
+                                        pref.getStringList('your info')[3];
+                                    this.follows = 'Following';
+                                  } else {
+                                    m1['followers']--;
+                                    m1['followers-name'][m2['name']] = null;
+                                    this.follows = 'Follow';
+                                  }
+                                } else {
+                                  print(m1);
+                                  if (m1['following-name'][m2['name']] ==
+                                      null) {
+                                    m1['following ']++;
+                                    m1['following-name'][m2['name']] =
+                                        widget.docid;
+                                    this.follows = 'Following';
+                                  } else {
+                                    m1['following ']--;
+                                    m1['following-name'][m2['name']] = null;
+                                    this.follows = 'Follow';
+                                  }
+                                }
+                                print('done');
+                                setState(() {});
+                                return m1;
+                              });
+                        },
+                        icon: Icon(Icons.verified_user),
+                      ))),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Channel()),
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 19, top: 8.0),
+            child: Container(
+              child: Text(
+                'You May Also Like',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
+            child: _dropDownList(),
+          ),
+        ],
+      ),
     );
   }
 
-  var flickManager;
+  FlickManager flickManager;
+
   void dispose() {
-    flickManager.dispose();
+    flickManager.flickVideoManager.dispose();
+    flickManager.flickControlManager.mute();
     super.dispose();
   }
 
@@ -283,8 +285,11 @@ class _VideoDetailState extends State<VideoDetail> {
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.network(widget.info.video),
     );
+
     return Container(
-      child: FlickVideoPlayer(flickManager: flickManager),
+      child: FlickVideoPlayer(
+        flickManager: flickManager,
+      ),
     );
   }
 
@@ -496,7 +501,10 @@ class _VideoDetailState extends State<VideoDetail> {
                           : Colors.blue[300];
                       setState(() {});
                     },
-                    child: Icon(Icons.thumb_down,color: iconcolord,))),
+                    child: Icon(
+                      Icons.thumb_down,
+                      color: iconcolord,
+                    ))),
             Expanded(
               child: FlatButton(
                   onPressed: () {

@@ -18,7 +18,6 @@ class Auth {
   Future<dynamic> signup() async {
     await Firebase.initializeApp();
     try {
-      
       var firestore = FirebaseFirestore.instance;
       var doc = firestore.doc('user/3eegwiaV0kADBBbCzcmd');
       var doc2 = firestore.doc('channel-name/yMmX4Y3jKLthGC7tb07s');
@@ -65,6 +64,7 @@ class Auth {
       var firestore = FirebaseFirestore.instance;
       var doc = firestore.doc('user/3eegwiaV0kADBBbCzcmd');
       var docdata = await doc.get();
+      await pref.setBool('auth', true);
       await pref.setStringList('your info', [
         this.name,
         this.email,

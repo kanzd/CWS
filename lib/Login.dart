@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newapp1/services/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Tabs.dart';
 import 'signup.dart';
 import 'CustomBorder.dart';
@@ -16,8 +17,19 @@ class _LoginState extends State<Login> {
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
+  bool auth = true;
+
+  fun() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool('auth')) {
+      Navigator.pushReplacement(
+          context, new MaterialPageRoute(builder: (context) => MyTabs()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    fun();
     return Scaffold(
       key: key,
       backgroundColor: Colors.white,
@@ -85,20 +97,17 @@ class _LoginState extends State<Login> {
                                     email: controller1.text,
                                     passcode: controller2.text)
                                 .login();
-                            
-                            if (auth[0]) {
-                               Navigator.pushReplacement(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => MyTabs()));
-                             
 
+                            if (auth[0]) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => MyTabs()));
+                            } else {
+                              key.currentState.showSnackBar(SnackBar(
+                                content: Text(auth[1].code),
+                              ));
                             }
-                            else
-                            {
-                               key.currentState.showSnackBar(SnackBar(content: Text(auth[1].code),));
-                             }
-                           
                           },
                           child: Text(
                             "LOGIN",
@@ -153,9 +162,7 @@ class _LoginState extends State<Login> {
                       Container(
                         width: double.infinity,
                         child: RaisedButton(
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                           child: Text(
                             "FACEBOOK LOGIN",
                             style: CustomTextStyle.textFormFieldMedium
