@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newapp1/search.dart';
 import 'Channel_Page.dart';
 import 'VideoInfo.dart';
 
@@ -17,7 +18,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         title: Text("Home"),
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Search()));
+            },
             icon: Icon(Icons.search),
           ),
         ],

@@ -48,6 +48,7 @@ dependencies:
   flick_video_player: ^0.1.1
   share_extend: "^1.1.9"
   circular_profile_avatar: ^1.0.6
+  flutter_easyloading: ^2.0.0
   
 
 

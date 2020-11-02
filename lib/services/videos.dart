@@ -25,74 +25,80 @@ class Videos {
     await Firebase.initializeApp();
     var firestore = FirebaseFirestore.instance;
     var doc = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
+    var ser = firestore.doc('vedioref/9pUTQ0wJ73BvR07yHwob');
     var doc2 = firestore.doc(this.docid);
     var docdata = await doc.get();
     var doc2data = await doc2.get();
+    var docser = await ser.get();
 
-    var data = docdata.data()[title + time.toString()];
-    if (data == null) {
-      var storage = FirebaseStorage.instance
-          .ref()
-          .child('video/$title${time.toString()}');
-      var thumbnails = FirebaseStorage.instance
-          .ref()
-          .child('thumbnail/$title${time.toString()}');
+    var storage =
+        FirebaseStorage.instance.ref().child('video/$title${time.toString()}');
+    var thumbnails = FirebaseStorage.instance
+        .ref()
+        .child('thumbnail/$title${time.toString()}');
 
-      var upload =
-          storage.putFile(file, StorageMetadata(contentType: 'video/mp4'));
-      var upload2 = thumbnails.putFile(thumbnail);
+    var upload =
+        storage.putFile(file, StorageMetadata(contentType: 'video/mp4'));
+    var upload2 = thumbnails.putFile(thumbnail);
 
-      var uploadref = await upload.onComplete;
-      var uploadref2 = await upload2.onComplete;
+    var uploadref = await upload.onComplete;
+    var uploadref2 = await upload2.onComplete;
 
-      await doc.update({
-        time.toString().split('.')[0]: {
-          'videouri': await uploadref.ref.getDownloadURL(),
-          'thumbnail': await uploadref2.ref.getDownloadURL(),
-          'user': doc2data.data()['name'],
-          'likes': 0,
-          'title': title,
-          'hashtag': hashtag,
-          'dislikes': 0,
-          'comments': 0,
-          'views': 0,
-          'type': type,
-          'length': length,
-          'docid': docid,
-          'commentL': {},
-        }
-      });
-      var videos = doc2data.data()['videos'];
-      videos[time.toString().split('.')[0]] = {
-        'thumbnail': await uploadref2.ref.getDownloadURL(),
+    await doc.update({
+      time.toString().split('.')[0]: {
         'videouri': await uploadref.ref.getDownloadURL(),
-        'likes': 0,
-        'dislikes': 0,
-        'hashtag': hashtag,
-        'title': title,
+        'thumbnail': await uploadref2.ref.getDownloadURL(),
         'user': doc2data.data()['name'],
+        'likes': 0,
+        'title': title,
+        'hashtag': hashtag,
+        'dislikes': 0,
         'comments': 0,
         'views': 0,
         'type': type,
-        'docid': docid,
         'length': length,
-        'commectL': {},
-      };
-      uploadByType(
-        hashtag: hashtag,
-        title: title,
-        thumbnail: await uploadref2.ref.getDownloadURL(),
-        video: await uploadref.ref.getDownloadURL(),
-        time: time,
-        length: length,
-        name: doc2data.data()['name'],
-        docid: docid,
-        type: type,
-      );
-      await doc2.update({
-        'videos': videos,
-      });
+        'docid': docid,
+        'commentL': {},
+      }
+    });
+    var videos = doc2data.data()['videos'];
+    videos[time.toString().split('.')[0]] = {
+      'thumbnail': await uploadref2.ref.getDownloadURL(),
+      'videouri': await uploadref.ref.getDownloadURL(),
+      'likes': 0,
+      'dislikes': 0,
+      'hashtag': hashtag,
+      'title': title,
+      'user': doc2data.data()['name'],
+      'comments': 0,
+      'views': 0,
+      'type': type,
+      'docid': docid,
+      'length': length,
+      'commectL': {},
+    };
+    uploadByType(
+      hashtag: hashtag,
+      title: title,
+      thumbnail: await uploadref2.ref.getDownloadURL(),
+      video: await uploadref.ref.getDownloadURL(),
+      time: time,
+      length: length,
+      name: doc2data.data()['name'],
+      docid: docid,
+      type: type,
+    );
+    await doc2.update({
+      'videos': videos,
+    });
+    var ls=docser.data()[title];
+    if (ls==null) {
+      ls = [];
     }
+    ls.add(time.toString().split('.')[0]);
+    await ser.update({
+      title: ls,
+    });
   }
 
   uploadByType(
@@ -272,7 +278,60 @@ class Videos {
     };
   }
 
- 
+  setComment(key, type, comment, [docid]) async {
+    await Firebase.initializeApp();
+    var firestore = FirebaseFirestore.instance;
+    var doc = firestore.doc(docid != null ? docid : this.docid);
+    var doc2 = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
+    DocumentReference doc3;
+    if (type == "Music")
+      doc3 = firestore
+          .doc('vedioref/0snSkSG1HxVpgTQ1pzjT/music/tySX14VAbC5kX6JAT4Hw');
+    else if (type == 'Games')
+      doc3 = firestore
+          .doc('vedioref/0snSkSG1HxVpgTQ1pzjT/games/4NTKht6v17GYK6QSrW7w');
+    else if (type == 'Sports')
+      doc3 = firestore
+          .doc('vedioref/0snSkSG1HxVpgTQ1pzjT/sports/fbZY3bTYA32pQpneB8ue');
+    else if (type == 'Movies')
+      doc3 = firestore
+          .doc('vedioref/0snSkSG1HxVpgTQ1pzjT/movies/erhvCRKE2QO6hYQMbc8G');
+    else {
+      doc3 = firestore.doc('vedioref/0snSkSG1HxVpgTQ1pzjT');
+    }
+    var data = await doc.get();
+    var data2 = await doc2.get();
+    var data3 = await doc3.get();
+    var finald1 = data.data()['videos'];
+    var finald2 = data2.data()[key];
+    var finald3 = data3.data()[key];
+
+    String date = DateTime.now().toString().split('.')[0];
+    finald1[key]['commectL'][date] = {
+      'name': data['name'],
+      'comment': comment,
+      'docid': docid != null ? docid : this.docid,
+    };
+    finald2['commentL'][date] = {
+      'name': data['name'],
+      'comment': comment,
+      'docid': docid != null ? docid : this.docid,
+    };
+    finald3['commectL'][date] = {
+      'name': data['name'],
+      'comment': comment,
+      'docid': docid != null ? docid : this.docid,
+    };
+    await doc.update({
+      'videos': finald1,
+    });
+    await doc2.update({
+      key: finald2,
+    });
+    await doc3.update({
+      key: finald3,
+    });
+  }
 
   getData([docid]) async {
     await Firebase.initializeApp();

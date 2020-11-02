@@ -250,24 +250,24 @@ class _VideoDetailState extends State<VideoDetail> {
               );
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 19, top: 8.0),
-            child: Container(
-              child: Text(
-                'You May Also Like',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
-            child: _dropDownList(),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 19, top: 8.0),
+          //   child: Container(
+          //     child: Text(
+          //       'You May Also Like',
+          //       textAlign: TextAlign.start,
+          //       style: TextStyle(
+          //         color: Colors.grey,
+          //         fontSize: 15,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
+          //   child: _dropDownList(),
+          // ),
         ],
       ),
     );
@@ -531,7 +531,7 @@ class _VideoDetailState extends State<VideoDetail> {
               child: FlatButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CommentBox()));
+                        MaterialPageRoute(builder: (context) => CommentBox(info:widget.info)));
                   },
                   child: Image.asset('assets/images/Group 262.png',
                       height: 44, width: 44)),
@@ -578,51 +578,51 @@ class _VideoDetailState extends State<VideoDetail> {
   //   );
   // }
 
-  Widget _dropDownList() {
-    return Container(
-      height: 300,
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(width: 10),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 100,
-              width: 110,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: ListTile(
-                  title: Text(
-                    'Video Name , Legthening the Title For the Idea of the Title Placement',
-                    style: TextStyle(color: Colors.black54, fontSize: 12.0),
-                  ),
-                  subtitle: Text(
-                    '                                                                                                                                            ' +
-                        '04.08 min' +
-                        'Channel Name' +
-                        '    ' +
-                        '2.7k views',
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _dropDownList() {
+  //   return Container(
+  //     height: 300,
+  //     color: Colors.white,
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         SizedBox(width: 10),
+  //         Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Container(
+  //             height: 100,
+  //             width: 110,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(10),
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //         ),
+  //         Expanded(
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Container(
+  //               child: ListTile(
+  //                 title: Text(
+  //                   'Video Name , Legthening the Title For the Idea of the Title Placement',
+  //                   style: TextStyle(color: Colors.black54, fontSize: 12.0),
+  //                 ),
+  //                 subtitle: Text(
+  //                   '                                                                                                                                            ' +
+  //                       '04.08 min' +
+  //                       'Channel Name' +
+  //                       '    ' +
+  //                       '2.7k views',
+  //                   style: TextStyle(
+  //                     fontSize: 12,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 //Image.asset('masxresdefault.jpg'),
 }
