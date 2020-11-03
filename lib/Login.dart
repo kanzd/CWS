@@ -162,7 +162,9 @@ class _LoginState extends State<Login> {
                       Container(
                         width: double.infinity,
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // Auth().facebookauth();
+                          },
                           child: Text(
                             "FACEBOOK LOGIN",
                             style: CustomTextStyle.textFormFieldMedium

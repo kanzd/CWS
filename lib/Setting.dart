@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newapp1/Account.dart';
 import 'package:newapp1/genrealPage.dart';
+import 'package:newapp1/privacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Login.dart';
@@ -17,7 +18,7 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _layouts = [
-      SizedBox(height: 50),
+     SizedBox(height: 20,),
       FlatButton(onPressed: (){
          Navigator.pushReplacement(
               context, new MaterialPageRoute(builder: (context) =>GenPage()));
@@ -41,7 +42,10 @@ class _SettingState extends State<Setting> {
         ),
       )),
       SizedBox(height: 30),
-      Container(
+      FlatButton(onPressed: (){
+         Navigator.pushReplacement(
+              context, new MaterialPageRoute(builder: (context) =>Privacy()));
+      },child:Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
@@ -59,7 +63,7 @@ class _SettingState extends State<Setting> {
             ),
           ],
         ),
-      ),
+      )),
       SizedBox(height: 30),
       FlatButton(onPressed: (){
          Navigator.pushReplacement(
@@ -84,7 +88,7 @@ class _SettingState extends State<Setting> {
         ),
       ),),
       SizedBox(height: 30),
-      Container(
+      FlatButton(onPressed: (){},child:Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
@@ -102,9 +106,9 @@ class _SettingState extends State<Setting> {
             ),
           ],
         ),
-      ),
+      ),),
       SizedBox(height: 30),
-      Container(
+      FlatButton(onPressed: (){},child:Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
@@ -122,9 +126,9 @@ class _SettingState extends State<Setting> {
             ),
           ],
         ),
-      ),
+      )),
       SizedBox(height: 30),
-      Container(
+    FlatButton(onPressed: (){},child:  Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
@@ -137,7 +141,7 @@ class _SettingState extends State<Setting> {
             Text('About'),
           ],
         ),
-      ),
+      )),
       SizedBox(height: 30),
       FlatButton(
         onPressed: () async {

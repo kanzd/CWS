@@ -17,7 +17,10 @@ import './services/videos.dart';
 
 //
 class Channel extends StatefulWidget {
-  const Channel({Key key}) : super(key: key);
+  var docid;
+  Channel({Key key, docid}) : super(key: key) {
+    this.docid = docid;
+  }
 
   @override
   _ChannelState createState() => _ChannelState();
@@ -53,15 +56,30 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
 
   void getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    data = await Videos(docid: pref.getStringList('your info')[3]).getData();
+    data = await Videos(
+            docid: widget.docid == null
+                ? pref.getStringList('your info')[3]
+                : widget.docid)
+        .getData();
     await Firebase.initializeApp();
     var firestore = FirebaseFirestore.instance;
-    var doc = firestore.doc(pref.getStringList('your info')[3]);
+    var doc = firestore.doc(widget.docid == null
+        ? pref.getStringList('your info')[3]
+        : widget.docid);
     var docdata = await doc.get();
     s1 = docdata.data()['name'];
     setState(() {
       flag = true;
     });
+  }
+
+  Widget _GetPage(Tab tab) {
+    switch (tab.text) {
+      case 'New Uploads':
+        return NewUploads(docid: widget.docid);
+      case 'All Videos':
+        return AllVideos(docid:widget.docid);
+    }
   }
 
   @override
@@ -287,14 +305,5 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
           MaterialPageRoute(
               builder: (BuildContext context) => Upload_Screen()));
     }
-  }
-}
-
-Widget _GetPage(Tab tab) {
-  switch (tab.text) {
-    case 'New Uploads':
-      return NewUploads();
-    case 'All Videos':
-      return AllVideos();
   }
 }

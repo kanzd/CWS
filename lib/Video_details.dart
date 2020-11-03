@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:newapp1/services/fileselect.dart';
 import 'package:newapp1/services/videos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CommentBox.dart';
@@ -133,159 +134,177 @@ class _VideoDetailState extends State<VideoDetail> {
 
   @override
   Widget build(BuildContext context) {
+    controller12 = VideoPlayerController.network(widget.info.video);
+    flickManager = FlickManager(
+      videoPlayerController: controller12,
+    );
     if (!flag2) checkfollow();
     if (!flag) check();
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () async {
-            flickManager.flickControlManager.dispose();
-            print('done');
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_left),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              setState(() {
+                controller12.seekTo(Duration(days: 1));
+                flickManager = null;
+              });
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_left),
+          ),
+          centerTitle: true,
+          title: Text('Videos'),
         ),
-        centerTitle: true,
-        title: Text('Videos'),
-      ),
-      body: ListView(
-        children: <Widget>[
-          _buildVideoPlayer(context),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 0, top: 0),
-          //   child: Row(
-          //     children: [
-          //       Image.asset('assets/images/Group 22.png',
-          //           height: 17, width: 180)
-          //     ],
-          //   ),
-          // ),
-
-          _videoInfo(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: Text(
-                "${widget.info.title}",
-                style: TextStyle(color: Colors.black54, fontSize: 15.0),
-                textAlign: TextAlign.start,
+        body: ListView(
+          children: <Widget>[
+            Container(
+              child: FlickVideoPlayer(
+                key: GlobalKey(),
+                flickManager: flickManager,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _listIcon(context),
-          ),
-          _line(),
-          InkWell(
-            child: Padding(
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 0, top: 0),
+            //   child: Row(
+            //     children: [
+            //       Image.asset('assets/images/Group 22.png',
+            //           height: 17, width: 180)
+            //     ],
+            //   ),
+            // ),
+
+            _videoInfo(),
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                  height: 70,
-                  child: ListTile(
-                      leading: Image.asset('assets/images/Profile-1.png'),
-                      title: Text(
-                        '${widget.info.name}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black,
-                        ),
-                      ),
-                      subtitle: Text(
-                        '${followno} Followers',
-                        style: TextStyle(
-                          fontSize: 13,
-                        ),
-                      ),
-                      trailing: FlatButton.icon(
-                        label: Text(
-                          this.follows,
-                          style: TextStyle(color: this.color),
-                        ),
-                        onPressed: () async {
-                          SharedPreferences pref =
-                              await SharedPreferences.getInstance();
-                          Videos().updateFollowers(
-                              info: widget.info,
-                              perinfo: pref.getStringList('your info'),
-                              function: (Map m1, Map m2, String value) {
-                                if (value == 'follow') {
-                                  if (m1['followers-name'][m2['name']] ==
-                                      null) {
-                                    m1['followers']++;
-                                    m1['followers-name'][m2['name']] =
-                                        pref.getStringList('your info')[3];
-                                    this.follows = 'Following';
-                                  } else {
-                                    m1['followers']--;
-                                    m1['followers-name'][m2['name']] = null;
-                                    this.follows = 'Follow';
-                                  }
-                                } else {
-                                  print(m1);
-                                  if (m1['following-name'][m2['name']] ==
-                                      null) {
-                                    m1['following ']++;
-                                    m1['following-name'][m2['name']] =
-                                        widget.docid;
-                                    this.follows = 'Following';
-                                  } else {
-                                    m1['following ']--;
-                                    m1['following-name'][m2['name']] = null;
-                                    this.follows = 'Follow';
-                                  }
-                                }
-                                print('done');
-                                setState(() {});
-                                return m1;
-                              });
-                        },
-                        icon: Icon(Icons.verified_user),
-                      ))),
+                child: Text(
+                  "${widget.info.title}",
+                  style: TextStyle(color: Colors.black54, fontSize: 15.0),
+                  textAlign: TextAlign.start,
+                ),
+              ),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Channel()),
-              );
-            },
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 19, top: 8.0),
-          //   child: Container(
-          //     child: Text(
-          //       'You May Also Like',
-          //       textAlign: TextAlign.start,
-          //       style: TextStyle(
-          //         color: Colors.grey,
-          //         fontSize: 15,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
-          //   child: _dropDownList(),
-          // ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _listIcon(context),
+            ),
+            _line(),
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    height: 70,
+                    child: ListTile(
+                        leading: Image.asset('assets/images/Profile-1.png'),
+                        title: Text(
+                          '${widget.info.name}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(
+                          '${followno} Followers',
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                        trailing: FlatButton.icon(
+                          label: Text(
+                            this.follows,
+                            style: TextStyle(color: this.color),
+                          ),
+                          onPressed: () async {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            Videos().updateFollowers(
+                                info: widget.info,
+                                perinfo: pref.getStringList('your info'),
+                                function: (Map m1, Map m2, String value) {
+                                  if (value == 'follow') {
+                                    if (m1['followers-name'][m2['name']] ==
+                                        null) {
+                                      m1['followers']++;
+                                      m1['followers-name'][m2['name']] =
+                                          pref.getStringList('your info')[3];
+                                      this.follows = 'Following';
+                                    } else {
+                                      m1['followers']--;
+                                      m1['followers-name'][m2['name']] = null;
+                                      this.follows = 'Follow';
+                                    }
+                                  } else {
+                                    print(m1);
+                                    if (m1['following-name'][m2['name']] ==
+                                        null) {
+                                      m1['following ']++;
+                                      m1['following-name'][m2['name']] =
+                                          widget.docid;
+                                      this.follows = 'Following';
+                                    } else {
+                                      m1['following ']--;
+                                      m1['following-name'][m2['name']] = null;
+                                      this.follows = 'Follow';
+                                    }
+                                  }
+                                  print('done');
+                                  setState(() {});
+                                  return m1;
+                                });
+                          },
+                          icon: Icon(Icons.verified_user),
+                        ))),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Channel(docid: widget.docid)),
+                );
+              },
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 19, top: 8.0),
+            //   child: Container(
+            //     child: Text(
+            //       'You May Also Like',
+            //       textAlign: TextAlign.start,
+            //       style: TextStyle(
+            //         color: Colors.grey,
+            //         fontSize: 15,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
+            //   child: _dropDownList(),
+            // ),
+          ],
+        ),
       ),
+      onWillPop: () async {
+        setState(() {
+                controller12.seekTo(Duration(days: 1));
+                flickManager = null;
+              });
+              Navigator.pop(context);
+        return true;
+      },
     );
   }
 
   FlickManager flickManager;
+  VideoPlayerController controller12;
 
   void dispose() {
-    flickManager.flickVideoManager.dispose();
-    flickManager.flickControlManager.mute();
+    controller12.pause();
     super.dispose();
   }
 
   Widget _buildVideoPlayer(BuildContext context) {
-    flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.network(widget.info.video),
-    );
-
     return Container(
       child: FlickVideoPlayer(
         flickManager: flickManager,
@@ -530,8 +549,11 @@ class _VideoDetailState extends State<VideoDetail> {
             Expanded(
               child: FlatButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CommentBox(info:widget.info)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CommentBox(info: widget.info)));
                   },
                   child: Image.asset('assets/images/Group 262.png',
                       height: 44, width: 44)),

@@ -184,12 +184,16 @@ import 'Video_details.dart';
 //       );
 // }
 class AllVideos extends StatefulWidget {
+  var docid;
+  AllVideos({key, docid}) : super(key: key) {
+    this.docid = docid;
+  }
   @override
   _AllVideosState createState() => _AllVideosState();
 }
 
 class _AllVideosState extends State<AllVideos> {
- List<NewuploadModel> videolist = [];
+  List<NewuploadModel> videolist = [];
   bool flag = false;
   var data;
   void getlist() async {
@@ -197,28 +201,28 @@ class _AllVideosState extends State<AllVideos> {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     var list =
-        await Videos(docid: pref.getStringList('your info')[3]).getVideo();
+        await Videos(docid:widget.docid==null?pref.getStringList('your info')[3]:widget.docid).getVideo();
     print(list);
     List tempio = list.keys.toList();
     tempio.sort();
     await Firebase.initializeApp();
-    var firestore= FirebaseFirestore.instance;
-    var doc = firestore.doc(pref.getStringList('your info')[3]);
+    var firestore = FirebaseFirestore.instance;
+    var doc = firestore.doc(widget.docid==null?pref.getStringList('your info')[3]:widget.docid);
     var docdata = await doc.get();
     this.data = docdata.data()['following-name'];
     for (var i in tempio) {
       print(i);
       list1.add(NewuploadModel(
           thumbnail: list[i]['thumbnail'],
-          key:i,
+          key: i,
           video: list[i]['videouri'],
           title: list[i]['title'],
           commentlist: list[i]['commectL'],
           name: list[i]['user'],
-          type:list[i]['type'],
+          type: list[i]['type'],
           hashtag: list[i]['hashtag'],
           likes: list[i]['likes'],
-          docid:list[i]['docid'],
+          docid: list[i]['docid'],
           dislikes: list[i]['dislikes'],
           length: list[i]['length'],
           views: list[i]['views'],
@@ -245,91 +249,96 @@ class _AllVideosState extends State<AllVideos> {
         'No Uploads till now',
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ));
-    return  RefreshIndicator(
-      onRefresh: (){
-         flag = false;
+    return RefreshIndicator(
+        onRefresh: () {
+          flag = false;
           setState(() {});
-      },
-        child:CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate((context, int index) {
-            if (index < videolist.length) {
-              return FlatButton(onPressed: (){
-                    Navigator.pop(context);
-                    Navigator.push(context,  MaterialPageRoute(
-                            builder: (context) => VideoDetail(
-                                info: videolist[index],
-                                follwerslist: this.data,
-                                docid: videolist[index].docid)));
-                  },child:Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 100,
-                        width: 180,
-                        child: Image.network(
-                          videolist[index].thumbnail,
-                          loadingBuilder: (context, child, chunk) {
-                            if (chunk == null)
-                              return child;
-                            else
-                              return SpinKitDualRing(color: Colors.blue);
-                          },
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                            '${videolist[index].title}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 105),
-                            child: Text(
-                              '${videolist[index].length} ',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 10,
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, int index) {
+                if (index < videolist.length) {
+                  return FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VideoDetail(
+                                    info: videolist[index],
+                                    follwerslist: this.data,
+                                    docid: videolist[index].docid)));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 100,
+                                width: 180,
+                                child: Image.network(
+                                  videolist[index].thumbnail,
+                                  loadingBuilder: (context, child, chunk) {
+                                    if (chunk == null)
+                                      return child;
+                                    else
+                                      return SpinKitDualRing(
+                                          color: Colors.blue);
+                                  },
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 105),
-                            child: Text(
-                              '''channel Name   
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${videolist[index].title}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 105),
+                                    child: Text(
+                                      '${videolist[index].length} ',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 105),
+                                    child: Text(
+                                      '''channel Name   
                               ${videolist[index].views} views''',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 10,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ));
-            } else
-              return Text('');
-          }),
-        ),
-      ],
-    ));
+                          ],
+                        ),
+                      ));
+                } else
+                  return Text('');
+              }),
+            ),
+          ],
+        ));
   }
 }

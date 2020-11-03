@@ -208,7 +208,7 @@ class _NewUploadsState extends State<NewUploads> {
     tempio.sort();
     await Firebase.initializeApp();
     var firestore= FirebaseFirestore.instance;
-    var doc = firestore.doc(pref.getStringList('your info')[3]);
+    var doc = firestore.doc(widget.docid==null?pref.getStringList('your info')[3]:widget.docid);
     var docdata = await doc.get();
     this.data = docdata.data()['following-name'];
 

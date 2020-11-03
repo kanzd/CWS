@@ -91,8 +91,8 @@ class Videos {
     await doc2.update({
       'videos': videos,
     });
-    var ls=docser.data()[title];
-    if (ls==null) {
+    var ls = docser.data()[title];
+    if (ls == null) {
       ls = [];
     }
     ls.add(time.toString().split('.')[0]);
@@ -280,6 +280,7 @@ class Videos {
 
   setComment(key, type, comment, [docid]) async {
     await Firebase.initializeApp();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     var firestore = FirebaseFirestore.instance;
     var doc = firestore.doc(docid != null ? docid : this.docid);
     var doc2 = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
@@ -302,25 +303,28 @@ class Videos {
     var data = await doc.get();
     var data2 = await doc2.get();
     var data3 = await doc3.get();
+    var tempdoc =  firestore.doc(pref.getStringList('your info')[3]);
+    var docda = await tempdoc.get();
+
     var finald1 = data.data()['videos'];
     var finald2 = data2.data()[key];
     var finald3 = data3.data()[key];
 
     String date = DateTime.now().toString().split('.')[0];
     finald1[key]['commectL'][date] = {
-      'name': data['name'],
+      'name': docda.data()['name'],
       'comment': comment,
-      'docid': docid != null ? docid : this.docid,
+      'docid': pref.getStringList('your info')[3],
     };
     finald2['commentL'][date] = {
-      'name': data['name'],
+      'name': docda.data()['name'],
       'comment': comment,
-      'docid': docid != null ? docid : this.docid,
+      'docid': pref.getStringList('your info')[3],
     };
     finald3['commectL'][date] = {
-      'name': data['name'],
+      'name': docda.data()['name'],
       'comment': comment,
-      'docid': docid != null ? docid : this.docid,
+      'docid': pref.getStringList('your info')[3],
     };
     await doc.update({
       'videos': finald1,

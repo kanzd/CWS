@@ -49,6 +49,8 @@ dependencies:
   share_extend: "^1.1.9"
   circular_profile_avatar: ^1.0.6
   flutter_easyloading: ^2.0.0
+  # google_sign_in: "^4.5.1"
+  # flutter_facebook_auth: "^0.3.0"
   
 
 
