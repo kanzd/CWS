@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
-class Gift extends StatelessWidget {
+class Gift extends StatefulWidget {
+  int amount;
+  Gift({amount}) {
+    this.amount = amount;
+  }
+  @override
+  _GiftState createState() => _GiftState();
+}
+
+class _GiftState extends State<Gift> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -55,7 +64,7 @@ class Gift extends StatelessWidget {
             )),
             Expanded(
                 child: Text(
-              '50 Coins',
+              '${widget.amount} Coins',
               style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,

@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:newapp1/services/giftservice.dart';
 
 import 'GiftClick.dart';
 
-class GiftPop extends StatelessWidget {
+class GiftPop extends StatefulWidget {
+  String docid;
+  GiftPop({docid}) {
+    this.docid = docid;
+  }
+  @override
+  _GiftPopState createState() => _GiftPopState();
+}
+
+class _GiftPopState extends State<GiftPop> {
+  int amount = 50;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -36,40 +48,50 @@ class GiftPop extends StatelessWidget {
                 )
               ]),
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset(
-                    'assets/images/button.png',
-                    width: 50,
-                    height: 50,
-                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        this.amount += 50;
+                      });
+                    },
+                    child: Image.asset(
+                      'assets/images/button.png',
+                      width: 50,
+                      height: 50,
+                    )),
 
-                  Container(
-                    height: 220,
-                    width: 160,
-                    padding: EdgeInsets.only(top: 50.0),
-                    child: Text(
-                      '50',
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black38,
-                      ),
-                      textAlign: TextAlign.center,
+                Container(
+                  height: 150,
+                  width: 90,
+                  padding: EdgeInsets.only(top: 50.0),
+                  child: Text(
+                    '${this.amount}',
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black38,
                     ),
-                    decoration: BoxDecoration(
-                        color: Colors.blueAccent, shape: BoxShape.circle),
+                    textAlign: TextAlign.center,
                   ),
+                  decoration: BoxDecoration(
+                      color: Colors.blueAccent, shape: BoxShape.circle),
+                ),
 //                  Image.asset('assets/images/.png', width: 30, height: 30),
-                  Image.asset(
-                    'assets/images/button-.png',
-                    width: 50,
-                    height: 50,
-                  ),
-                ],
-              ),
+                FlatButton(
+                    onPressed: () {
+                      this.setState(() {
+                        if (amount > 0) this.amount -= 50;
+                      });
+                    },
+                    child: Image.asset(
+                      'assets/images/button-.png',
+                      width: 50,
+                      height: 50,
+                    )),
+              ],
             ),
             SizedBox(height: 50),
             Container(
@@ -96,9 +118,14 @@ class GiftPop extends StatelessWidget {
                     color: Colors.blue,
                     child: FlatButton(
                       onPressed: () {
+                        GiftService(
+                                giftamount: this.amount, docid: widget.docid)
+                            .sendGift();
+                        print(widget.docid);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Gift()),
+                          MaterialPageRoute(
+                              builder: (context) => Gift(amount: this.amount)),
                         );
                       },
                       child: Text(

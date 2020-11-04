@@ -527,7 +527,7 @@ class _VideoDetailState extends State<VideoDetail> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GiftPop()),
+                  MaterialPageRoute(builder: (context) => GiftPop(docid: widget.docid,)),
                 );
               },
               child: Image.asset('assets/images/Group 264.png',

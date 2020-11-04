@@ -24,6 +24,7 @@ class Auth {
       var doc2 = firestore.doc('channel-name/yMmX4Y3jKLthGC7tb07s');
       var data = await doc2.get();
       var collection = firestore.collection('videos');
+    
       var ref = await collection.add({
         'name': this.name,
         'followers': 0,
@@ -63,7 +64,7 @@ class Auth {
     var auth = FirebaseAuth.instance;
 
     await auth.sendPasswordResetEmail(
-        email: email==null?pref.getStringList('your info')[1]:email);
+        email: email == null ? pref.getStringList('your info')[1] : email);
     return true;
   }
 
