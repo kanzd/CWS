@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newapp1/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 import 'Tabs.dart';
 import 'signup.dart';
 import 'CustomBorder.dart';
@@ -122,61 +123,90 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Utils.getSizedBox(height: 10),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          child: Text(
-                            "Forget Password?",
-                            style: CustomTextStyle.textFormFieldBold
-                                .copyWith(color: Colors.blue, fontSize: 14),
-                          ),
-                        ),
-                      ),
-                      Utils.getSizedBox(height: 10),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              color: Colors.grey.shade200,
-                              margin: EdgeInsets.only(right: 16),
-                              height: 1,
-                            ),
-                            flex: 40,
-                          ),
-                          Text(
-                            "Or",
-                            style: CustomTextStyle.textFormFieldMedium
-                                .copyWith(fontSize: 14),
-                          ),
-                          Expanded(
-                            child: Container(
-                              color: Colors.grey.shade200,
-                              margin: EdgeInsets.only(left: 16),
-                              height: 1,
-                            ),
-                            flex: 40,
-                          )
-                        ],
-                      ),
-                      Utils.getSizedBox(height: 14),
-                      Container(
-                        width: double.infinity,
-                        child: RaisedButton(
+                      FlatButton(
                           onPressed: () {
-                            // Auth().facebookauth();
+                            TextEditingController controller =
+                                TextEditingController();
+
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    actions: [
+                                      FlatButton(
+                                        onPressed: () {
+                                          Auth().sendcode(controller.text);
+                                          Navigator.pop(context);
+                                          Toast.show(
+                                              'Reset Link Sent', context);
+                                        },
+                                        child: Text('request'),
+                                      )
+                                    ],
+                                    title: Text("Enter Your Email"),
+                                    content: TextField(
+                                      controller: controller,
+                                      decoration:
+                                          InputDecoration(labelText: 'Email'),
+                                    ),
+                                  );
+                                });
                           },
-                          child: Text(
-                            "FACEBOOK LOGIN",
-                            style: CustomTextStyle.textFormFieldMedium
-                                .copyWith(color: Colors.white, fontSize: 14),
-                          ),
-                          color: CustomColors.COLOR_FB,
-                          textColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4))),
-                        ),
-                      ),
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              child: Text(
+                                "Forget Password?",
+                                style: CustomTextStyle.textFormFieldBold
+                                    .copyWith(color: Colors.blue, fontSize: 14),
+                              ),
+                            ),
+                          )),
+                      Utils.getSizedBox(height: 10),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Expanded(
+                      //       child: Container(
+                      //         color: Colors.grey.shade200,
+                      //         margin: EdgeInsets.only(right: 16),
+                      //         height: 1,
+                      //       ),
+                      //       flex: 40,
+                      //     ),
+                      //     Text(
+                      //       "Or",
+                      //       style: CustomTextStyle.textFormFieldMedium
+                      //           .copyWith(fontSize: 14),
+                      //     ),
+                      //     Expanded(
+                      //       child: Container(
+                      //         color: Colors.grey.shade200,
+                      //         margin: EdgeInsets.only(left: 16),
+                      //         height: 1,
+                      //       ),
+                      //       flex: 40,
+                      //     )
+                      //   ],
+                      // ),
+                      // Utils.getSizedBox(height: 14),
+                      // Container(
+                      //   width: double.infinity,
+                      //   child: RaisedButton(
+                      //     onPressed: () {
+                      //       // Auth().facebookauth();
+                      //     },
+                      //     child: Text(
+                      //       "FACEBOOK LOGIN",
+                      //       style: CustomTextStyle.textFormFieldMedium
+                      //           .copyWith(color: Colors.white, fontSize: 14),
+                      //     ),
+                      //     color: CustomColors.COLOR_FB,
+                      //     textColor: Colors.white,
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius:
+                      //             BorderRadius.all(Radius.circular(4))),
+                      //   ),
+                      // ),
                       Utils.getSizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

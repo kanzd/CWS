@@ -158,11 +158,7 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    trailing: Image.asset(
-                                      'assets/images/QWEQ.png',
-                                      height: 50,
-                                      width: 150,
-                                    ),
+                                    
                                   ),
                                   SizedBox(height: 20),
                                   Padding(
@@ -269,7 +265,7 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              onRefresh: () {
+              onRefresh: () async {
                 flag = true;
                 setState(() {});
               },

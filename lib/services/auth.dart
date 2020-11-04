@@ -57,13 +57,13 @@ class Auth {
     }
   }
 
-  sendcode() async {
+  sendcode([String email]) async {
     await Firebase.initializeApp();
     SharedPreferences pref = await SharedPreferences.getInstance();
     var auth = FirebaseAuth.instance;
 
     await auth.sendPasswordResetEmail(
-        email: pref.getStringList('your info')[1]);
+        email: email==null?pref.getStringList('your info')[1]:email);
     return true;
   }
 

@@ -47,7 +47,9 @@ class _VideoDetailState extends State<VideoDetail> {
       iconcolord = Colors.blue[300];
     } else
       iconcolord = Colors.grey[500];
-    setState(() {});
+    setState(() {
+      vals = true;
+    });
   }
 
   void checkfollow() async {
@@ -59,6 +61,7 @@ class _VideoDetailState extends State<VideoDetail> {
     setState(() {
       followno = docdata.data()['followers'].toString();
       flag2 = true;
+      vals = true;
     });
   }
 
@@ -77,6 +80,7 @@ class _VideoDetailState extends State<VideoDetail> {
         this.color = Colors.blue[900];
 
         this.flag = true;
+        vals = true;
       });
     }
   }
@@ -122,7 +126,9 @@ class _VideoDetailState extends State<VideoDetail> {
     doc3.update({
       widget.info.key: views3,
     });
-    setState(() {});
+    setState(() {
+      vals = true;
+    });
   }
 
   bool flag2 = false;
@@ -132,167 +138,160 @@ class _VideoDetailState extends State<VideoDetail> {
     checklike();
   }
 
+  bool vals = false;
   @override
   Widget build(BuildContext context) {
-    controller12 = VideoPlayerController.network(widget.info.video);
-    flickManager = FlickManager(
-      videoPlayerController: controller12,
-    );
+    if (!vals) {
+      controller12 = VideoPlayerController.network(widget.info.video);
+      flickManager = FlickManager(
+        videoPlayerController: controller12,
+      );
+    }
     if (!flag2) checkfollow();
     if (!flag) check();
-    return WillPopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              setState(() {
-                controller12.seekTo(Duration(days: 1));
-                flickManager = null;
-              });
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_left),
-          ),
-          centerTitle: true,
-          title: Text('Videos'),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              controller12.pause();
+              vals = true;
+            });
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_left),
         ),
-        body: ListView(
-          children: <Widget>[
-            Container(
-              child: FlickVideoPlayer(
-                key: GlobalKey(),
-                flickManager: flickManager,
+        centerTitle: true,
+        title: Text('Videos'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Container(
+            child: FlickVideoPlayer(
+              key: GlobalKey(),
+              flickManager: flickManager,
+            ),
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 0, top: 0),
+          //   child: Row(
+          //     children: [
+          //       Image.asset('assets/images/Group 22.png',
+          //           height: 17, width: 180)
+          //     ],
+          //   ),
+          // ),
+
+          _videoInfo(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: Text(
+                "${widget.info.title}",
+                style: TextStyle(color: Colors.black54, fontSize: 15.0),
+                textAlign: TextAlign.start,
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 0, top: 0),
-            //   child: Row(
-            //     children: [
-            //       Image.asset('assets/images/Group 22.png',
-            //           height: 17, width: 180)
-            //     ],
-            //   ),
-            // ),
-
-            _videoInfo(),
-            Padding(
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _listIcon(context),
+          ),
+          _line(),
+          InkWell(
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                child: Text(
-                  "${widget.info.title}",
-                  style: TextStyle(color: Colors.black54, fontSize: 15.0),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _listIcon(context),
-            ),
-            _line(),
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    height: 70,
-                    child: ListTile(
-                        leading: Image.asset('assets/images/Profile-1.png'),
-                        title: Text(
-                          '${widget.info.name}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                          ),
+                  height: 70,
+                  child: ListTile(
+                      leading: Image.asset('assets/images/Profile-1.png'),
+                      title: Text(
+                        '${widget.info.name}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
                         ),
-                        subtitle: Text(
-                          '${followno} Followers',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
+                      ),
+                      subtitle: Text(
+                        '${followno} Followers',
+                        style: TextStyle(
+                          fontSize: 13,
                         ),
-                        trailing: FlatButton.icon(
-                          label: Text(
-                            this.follows,
-                            style: TextStyle(color: this.color),
-                          ),
-                          onPressed: () async {
-                            SharedPreferences pref =
-                                await SharedPreferences.getInstance();
-                            Videos().updateFollowers(
-                                info: widget.info,
-                                perinfo: pref.getStringList('your info'),
-                                function: (Map m1, Map m2, String value) {
-                                  if (value == 'follow') {
-                                    if (m1['followers-name'][m2['name']] ==
-                                        null) {
-                                      m1['followers']++;
-                                      m1['followers-name'][m2['name']] =
-                                          pref.getStringList('your info')[3];
-                                      this.follows = 'Following';
-                                    } else {
-                                      m1['followers']--;
-                                      m1['followers-name'][m2['name']] = null;
-                                      this.follows = 'Follow';
-                                    }
+                      ),
+                      trailing: FlatButton.icon(
+                        label: Text(
+                          this.follows,
+                          style: TextStyle(color: this.color),
+                        ),
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          Videos().updateFollowers(
+                              info: widget.info,
+                              perinfo: pref.getStringList('your info'),
+                              function: (Map m1, Map m2, String value) {
+                                if (value == 'follow') {
+                                  if (m1['followers-name'][m2['name']] ==
+                                      null) {
+                                    m1['followers']++;
+                                    m1['followers-name'][m2['name']] =
+                                        pref.getStringList('your info')[3];
+                                    this.follows = 'Following';
                                   } else {
-                                    print(m1);
-                                    if (m1['following-name'][m2['name']] ==
-                                        null) {
-                                      m1['following ']++;
-                                      m1['following-name'][m2['name']] =
-                                          widget.docid;
-                                      this.follows = 'Following';
-                                    } else {
-                                      m1['following ']--;
-                                      m1['following-name'][m2['name']] = null;
-                                      this.follows = 'Follow';
-                                    }
+                                    m1['followers']--;
+                                    m1['followers-name'][m2['name']] = null;
+                                    this.follows = 'Follow';
                                   }
-                                  print('done');
-                                  setState(() {});
-                                  return m1;
-                                });
-                          },
-                          icon: Icon(Icons.verified_user),
-                        ))),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Channel(docid: widget.docid)),
-                );
-              },
+                                } else {
+                                  print(m1);
+                                  if (m1['following-name'][m2['name']] ==
+                                      null) {
+                                    m1['following ']++;
+                                    m1['following-name'][m2['name']] =
+                                        widget.docid;
+                                    this.follows = 'Following';
+                                  } else {
+                                    m1['following ']--;
+                                    m1['following-name'][m2['name']] = null;
+                                    this.follows = 'Follow';
+                                  }
+                                }
+                                print('done');
+                                setState(() {});
+                                return m1;
+                              });
+                        },
+                        icon: Icon(Icons.verified_user),
+                      ))),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 19, top: 8.0),
-            //   child: Container(
-            //     child: Text(
-            //       'You May Also Like',
-            //       textAlign: TextAlign.start,
-            //       style: TextStyle(
-            //         color: Colors.grey,
-            //         fontSize: 15,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
-            //   child: _dropDownList(),
-            // ),
-          ],
-        ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Channel(docid: widget.docid)),
+              );
+            },
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 19, top: 8.0),
+          //   child: Container(
+          //     child: Text(
+          //       'You May Also Like',
+          //       textAlign: TextAlign.start,
+          //       style: TextStyle(
+          //         color: Colors.grey,
+          //         fontSize: 15,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
+          //   child: _dropDownList(),
+          // ),
+        ],
       ),
-      onWillPop: () async {
-        setState(() {
-                controller12.seekTo(Duration(days: 1));
-                flickManager = null;
-              });
-              Navigator.pop(context);
-        return true;
-      },
     );
   }
 
@@ -300,7 +299,11 @@ class _VideoDetailState extends State<VideoDetail> {
   VideoPlayerController controller12;
 
   void dispose() {
-    controller12.pause();
+    setState(() {
+      controller12.pause();
+      vals = true;
+    });
+
     super.dispose();
   }
 
@@ -372,194 +375,184 @@ class _VideoDetailState extends State<VideoDetail> {
   Color iconcolord = Colors.grey[500];
   Widget _listIcon(context) {
     Color _iconColor = Colors.transparent;
-    return Expanded(
-      child: Container(
-        width: 200,
-        padding: EdgeInsets.only(top: 10, left: 0.0, bottom: 5.0, right: 20),
-        child: Row(
-          children: [
-            Expanded(
-              child: FlatButton(
-                  color: _iconColor,
-                  onPressed: () async {
-                    SharedPreferences pref =
-                        await SharedPreferences.getInstance();
+    return Container(
+      width: 200,
+      padding: EdgeInsets.only(top: 10, left: 0.0, bottom: 5.0, right: 20),
+      child: Row(
+        children: [
+          FlatButton(
+              minWidth: 10,
+              color: _iconColor,
+              onPressed: () async {
+                SharedPreferences pref = await SharedPreferences.getInstance();
 
-                    await Firebase.initializeApp();
-                    var firestore = FirebaseFirestore.instance;
-                    var doc = firestore.doc(pref.getStringList('your info')[3]);
-                    var doc1 = firestore.doc(widget.docid);
-                    var doc2 = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
-                    DocumentReference doc3;
-                    if (widget.info.type == "Music")
-                      doc3 = firestore.doc(
-                          'vedioref/0snSkSG1HxVpgTQ1pzjT/music/tySX14VAbC5kX6JAT4Hw');
-                    else if (widget.info.type == 'Games')
-                      doc3 = firestore.doc(
-                          'vedioref/0snSkSG1HxVpgTQ1pzjT/games/4NTKht6v17GYK6QSrW7w');
-                    else if (widget.info.type == 'Sports')
-                      doc3 = firestore.doc(
-                          'vedioref/0snSkSG1HxVpgTQ1pzjT/sports/fbZY3bTYA32pQpneB8ue');
-                    else if (widget.info.type == 'Movies')
-                      doc3 = firestore.doc(
-                          'vedioref/0snSkSG1HxVpgTQ1pzjT/movies/erhvCRKE2QO6hYQMbc8G');
-                    else {
-                      doc3 = firestore.doc('vedioref/0snSkSG1HxVpgTQ1pzjT');
-                    }
-                    var docdatapre = await doc.get();
-                    var docdata = await doc1.get();
-                    var docdata2 = await doc2.get();
-                    var docdata3 = await doc3.get();
+                await Firebase.initializeApp();
+                var firestore = FirebaseFirestore.instance;
+                var doc = firestore.doc(pref.getStringList('your info')[3]);
+                var doc1 = firestore.doc(widget.docid);
+                var doc2 = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
+                DocumentReference doc3;
+                if (widget.info.type == "Music")
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/music/tySX14VAbC5kX6JAT4Hw');
+                else if (widget.info.type == 'Games')
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/games/4NTKht6v17GYK6QSrW7w');
+                else if (widget.info.type == 'Sports')
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/sports/fbZY3bTYA32pQpneB8ue');
+                else if (widget.info.type == 'Movies')
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/movies/erhvCRKE2QO6hYQMbc8G');
+                else {
+                  doc3 = firestore.doc('vedioref/0snSkSG1HxVpgTQ1pzjT');
+                }
+                var docdatapre = await doc.get();
+                var docdata = await doc1.get();
+                var docdata2 = await doc2.get();
+                var docdata3 = await doc3.get();
 
-                    List likedvideos = docdatapre.data()['likedvideos'];
-                    var videos = docdata.data()['videos'];
-                    var data = docdata2.data()[widget.info.key];
-                    var data2 = docdata3.data()[widget.info.key];
-                    if (likedvideos == null) {
-                      likedvideos = [];
-                    }
-                    print('done23');
-                    if (likedvideos.contains(widget.info.key)) {
-                      videos[widget.info.key]['likes']--;
-                      data['likes']--;
-                      data2['likes']--;
-                      likedvideos.remove(widget.info.key);
-                    } else {
-                      videos[widget.info.key]['likes']++;
-                      data['likes']++;
-                      data2['likes']++;
-                      likedvideos.add(widget.info.key);
-                    }
-                    doc.update({
-                      'likedvideos': likedvideos,
-                    });
-                    doc1.update({
-                      'videos': videos,
-                    });
-                    doc2.update({
-                      widget.info.key: data,
-                    });
-                    doc3.update({
-                      widget.info.key: data2,
-                    });
+                List likedvideos = docdatapre.data()['likedvideos'];
+                var videos = docdata.data()['videos'];
+                var data = docdata2.data()[widget.info.key];
+                var data2 = docdata3.data()[widget.info.key];
+                if (likedvideos == null) {
+                  likedvideos = [];
+                }
+                print('done23');
+                if (likedvideos.contains(widget.info.key)) {
+                  videos[widget.info.key]['likes']--;
+                  data['likes']--;
+                  data2['likes']--;
+                  likedvideos.remove(widget.info.key);
+                } else {
+                  videos[widget.info.key]['likes']++;
+                  data['likes']++;
+                  data2['likes']++;
+                  likedvideos.add(widget.info.key);
+                }
+                doc.update({
+                  'likedvideos': likedvideos,
+                });
+                doc1.update({
+                  'videos': videos,
+                });
+                doc2.update({
+                  widget.info.key: data,
+                });
+                doc3.update({
+                  widget.info.key: data2,
+                });
 
-                    iconcolor = iconcolor == Colors.blue[300]
-                        ? Colors.grey[500]
-                        : Colors.blue[300];
-                    setState(() {});
-                  },
-                  child: Icon(Icons.thumb_up, color: iconcolor)),
-            ),
-            Expanded(
-                child: FlatButton(
-                    onPressed: () async {
-                      SharedPreferences pref =
-                          await SharedPreferences.getInstance();
+                iconcolor = iconcolor == Colors.blue[300]
+                    ? Colors.grey[500]
+                    : Colors.blue[300];
+                setState(() {});
+              },
+              child: Icon(Icons.thumb_up, color: iconcolor)),
+          FlatButton(
+              minWidth: 10,
+              onPressed: () async {
+                SharedPreferences pref = await SharedPreferences.getInstance();
 
-                      await Firebase.initializeApp();
-                      var firestore = FirebaseFirestore.instance;
-                      var doc =
-                          firestore.doc(pref.getStringList('your info')[3]);
-                      var doc1 = firestore.doc(widget.docid);
-                      var doc2 = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
-                      DocumentReference doc3;
-                      if (widget.info.type == "Music")
-                        doc3 = firestore.doc(
-                            'vedioref/0snSkSG1HxVpgTQ1pzjT/music/tySX14VAbC5kX6JAT4Hw');
-                      else if (widget.info.type == 'Games')
-                        doc3 = firestore.doc(
-                            'vedioref/0snSkSG1HxVpgTQ1pzjT/games/4NTKht6v17GYK6QSrW7w');
-                      else if (widget.info.type == 'Sports')
-                        doc3 = firestore.doc(
-                            'vedioref/0snSkSG1HxVpgTQ1pzjT/sports/fbZY3bTYA32pQpneB8ue');
-                      else if (widget.info.type == 'Movies')
-                        doc3 = firestore.doc(
-                            'vedioref/0snSkSG1HxVpgTQ1pzjT/movies/erhvCRKE2QO6hYQMbc8G');
-                      else {
-                        doc3 = firestore.doc('vedioref/0snSkSG1HxVpgTQ1pzjT');
-                      }
-                      var docdatapre = await doc.get();
-                      var docdata = await doc1.get();
-                      var docdata2 = await doc2.get();
-                      var docdata3 = await doc3.get();
+                await Firebase.initializeApp();
+                var firestore = FirebaseFirestore.instance;
+                var doc = firestore.doc(pref.getStringList('your info')[3]);
+                var doc1 = firestore.doc(widget.docid);
+                var doc2 = firestore.doc('vedioref/YRR4XMHkCVt8LMU3xJQS');
+                DocumentReference doc3;
+                if (widget.info.type == "Music")
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/music/tySX14VAbC5kX6JAT4Hw');
+                else if (widget.info.type == 'Games')
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/games/4NTKht6v17GYK6QSrW7w');
+                else if (widget.info.type == 'Sports')
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/sports/fbZY3bTYA32pQpneB8ue');
+                else if (widget.info.type == 'Movies')
+                  doc3 = firestore.doc(
+                      'vedioref/0snSkSG1HxVpgTQ1pzjT/movies/erhvCRKE2QO6hYQMbc8G');
+                else {
+                  doc3 = firestore.doc('vedioref/0snSkSG1HxVpgTQ1pzjT');
+                }
+                var docdatapre = await doc.get();
+                var docdata = await doc1.get();
+                var docdata2 = await doc2.get();
+                var docdata3 = await doc3.get();
 
-                      List dislikedvideos = docdatapre.data()['dislikedvideos'];
-                      var videos = docdata.data()['videos'];
-                      var data = docdata2.data()[widget.info.key];
-                      var data2 = docdata3.data()[widget.info.key];
-                      if (dislikedvideos == null) {
-                        dislikedvideos = [];
-                      }
-                      print('done23');
-                      if (dislikedvideos.contains(widget.info.key)) {
-                        videos[widget.info.key]['dislikes']--;
-                        data['dislikes']--;
-                        data2['dislikes']--;
-                        dislikedvideos.remove(widget.info.key);
-                      } else {
-                        videos[widget.info.key]['dislikes']++;
-                        data['dislikes']++;
-                        data2['dislikes']++;
-                        dislikedvideos.add(widget.info.key);
-                      }
-                      doc.update({
-                        'dislikedvideos': dislikedvideos,
-                      });
-                      doc1.update({
-                        'videos': videos,
-                      });
-                      doc2.update({
-                        widget.info.key: data,
-                      });
-                      doc3.update({
-                        widget.info.key: data2,
-                      });
+                List dislikedvideos = docdatapre.data()['dislikedvideos'];
+                var videos = docdata.data()['videos'];
+                var data = docdata2.data()[widget.info.key];
+                var data2 = docdata3.data()[widget.info.key];
+                if (dislikedvideos == null) {
+                  dislikedvideos = [];
+                }
+                print('done23');
+                if (dislikedvideos.contains(widget.info.key)) {
+                  videos[widget.info.key]['dislikes']--;
+                  data['dislikes']--;
+                  data2['dislikes']--;
+                  dislikedvideos.remove(widget.info.key);
+                } else {
+                  videos[widget.info.key]['dislikes']++;
+                  data['dislikes']++;
+                  data2['dislikes']++;
+                  dislikedvideos.add(widget.info.key);
+                }
+                doc.update({
+                  'dislikedvideos': dislikedvideos,
+                });
+                doc1.update({
+                  'videos': videos,
+                });
+                doc2.update({
+                  widget.info.key: data,
+                });
+                doc3.update({
+                  widget.info.key: data2,
+                });
 
-                      iconcolord = iconcolord == Colors.blue[300]
-                          ? Colors.grey[500]
-                          : Colors.blue[300];
-                      setState(() {});
-                    },
-                    child: Icon(
-                      Icons.thumb_down,
-                      color: iconcolord,
-                    ))),
-            Expanded(
-              child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GiftPop()),
-                    );
-                  },
-                  child: Image.asset('assets/images/Group 264.png',
-                      height: 44, width: 44)),
-            ),
-            Expanded(
-              child: FlatButton(
-                  color: ExitConfirmationDialog() != null
-                      ? Colors.transparent
-                      : Colors.blue,
-                  onPressed: () {
-                    ShareExtend.share(widget.info.video, 'text');
-                  },
-                  child: Image.asset('assets/images/Group 263.png',
-                      height: 44, width: 44)),
-            ),
-            Expanded(
-              child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CommentBox(info: widget.info)));
-                  },
-                  child: Image.asset('assets/images/Group 262.png',
-                      height: 44, width: 44)),
-            ),
-          ],
-        ),
+                iconcolord = iconcolord == Colors.blue[300]
+                    ? Colors.grey[500]
+                    : Colors.blue[300];
+                setState(() {});
+              },
+              child: Icon(
+                Icons.thumb_down,
+                color: iconcolord,
+              )),
+          FlatButton(
+              minWidth: 10,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GiftPop()),
+                );
+              },
+              child: Image.asset('assets/images/Group 264.png',
+                  height: 44, width: 44)),
+          FlatButton(
+              minWidth: 10,
+              color: ExitConfirmationDialog() != null
+                  ? Colors.transparent
+                  : Colors.blue,
+              onPressed: () {
+                ShareExtend.share(widget.info.video, 'text');
+              },
+              child: Image.asset('assets/images/Group 263.png',
+                  height: 44, width: 44)),
+          FlatButton(
+              minWidth: 10,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CommentBox(info: widget.info)));
+              },
+              child: Image.asset('assets/images/Group 262.png',
+                  height: 44, width: 44)),
+        ],
       ),
     );
   }
