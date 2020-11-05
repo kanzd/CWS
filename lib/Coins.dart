@@ -30,7 +30,8 @@ class _CoinsState extends State<Coins> {
     followers = docdata.data()['followers'];
     following = docdata.data()['following '];
     print(data);
-    var ls = data['history'].keys.toList();
+    
+    var ls = data['history'].keys.toList().reversed.toList();
     ls.sort();
     balance = data['balance'];
     _layouts = [
