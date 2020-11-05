@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:newapp1/Account.dart';
 import 'package:newapp1/genrealPage.dart';
 import 'package:newapp1/privacy.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Login.dart';
@@ -88,7 +89,9 @@ class _SettingState extends State<Setting> {
         ),
       ),),
       SizedBox(height: 30),
-      FlatButton(onPressed: (){},child:Container(
+      FlatButton(onPressed: (){
+        AdaptiveTheme.of(context).toggleThemeMode();
+      },child:Container(
         padding: EdgeInsets.only(left: 25.0),
         child: Row(
           children: [
