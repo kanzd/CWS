@@ -32,45 +32,41 @@ class _GiftState extends State<Gift> {
           children: <Widget>[
             SizedBox(height: 10),
             Center(
-              child: Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 120,
-                      width: 120,
-                      child: Icon(
-                        Icons.check,
-                        size: 50.0,
-                        color: Colors.white,
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.blueAccent, shape: BoxShape.circle),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 120,
+                    width: 120,
+                    child: Icon(
+                      Icons.check,
+                      size: 50.0,
+                      color: Colors.white,
                     ),
+                    decoration: BoxDecoration(
+                        color: Colors.blueAccent, shape: BoxShape.circle),
+                  ),
 //                  Image.asset('assets/images/.png', width: 30, height: 30),
-                  ],
-                ),
+                ],
               ),
             ),
             SizedBox(height: 20),
-            Expanded(
-                child: Text(
+            Text(
               'Gifted',
               style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
                 color: Colors.black38,
               ),
-            )),
-            Expanded(
-                child: Text(
+            ),
+            Text(
               '${widget.amount} Coins',
               style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
                 color: Colors.black38,
               ),
-            )),
+            ),
             Container(
               padding: EdgeInsets.only(bottom: 20),
               child: Row(

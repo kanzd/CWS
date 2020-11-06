@@ -134,7 +134,7 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
             ),
             RefreshIndicator(
               child: Scaffold(
-                backgroundColor: Colors.transparent,
+                
                 appBar: appBar,
                 body: Stack(
                   children: <Widget>[
