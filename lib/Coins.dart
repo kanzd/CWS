@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:newapp1/services/giftservice.dart';
+import 'package:newapp1/services/payment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Coins extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CoinsState extends State<Coins> {
     followers = docdata.data()['followers'];
     following = docdata.data()['following '];
     print(data);
-    
+
     var ls = data['history'].keys.toList().reversed.toList();
     ls.sort();
     balance = data['balance'];
@@ -190,16 +191,45 @@ class _CoinsState extends State<Coins> {
     );
   }
 
+  TextEditingController controller = TextEditingController();
   Widget _row2() {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset(
-            'assets/images/ADD Coin.png',
-            width: 150,
-            height: 100,
-          ),
+          FlatButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title:
+                            Text('Enter the Number of coins you want to add'),
+                        content: TextField(
+                          controller: controller,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              hintText: 'Enter the number of coins'),
+                        ),
+                        actions: [
+                          FlatButton(
+                            child: Text('Next'),
+                            onPressed: () {
+                              print(int.parse(controller.text) * 500);
+                              var amount = int.parse(controller.text);
+                              print(amount);
+                              Payment(amount: amount).pay();
+                            },
+                          )
+                        ],
+                      );
+                    });
+              },
+              child: Image.asset(
+                'assets/images/ADD Coin.png',
+                width: 150,
+                height: 100,
+              )),
           Image.asset(
             'assets/images/WITHDRAW.png',
             width: 150,
