@@ -14,6 +14,7 @@ import 'Constants.dart';
 import 'NewUploads.dart';
 import 'Setting.dart';
 import './services/videos.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 //
 class Channel extends StatefulWidget {
@@ -53,7 +54,7 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
   var data;
   bool flag = false;
   String s1 = '';
-
+  String dplink = 'images/app_image.jpg';
   void getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     data = await Videos(
@@ -68,6 +69,8 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
         : widget.docid);
     var docdata = await doc.get();
     s1 = docdata.data()['name'];
+    dplink = docdata.data()['DisplayPic']!=null?docdata.data()['DisplayPic']:dplink;
+    print(dplink);
     setState(() {
       flag = true;
     });
@@ -78,7 +81,7 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
       case 'New Uploads':
         return NewUploads(docid: widget.docid);
       case 'All Videos':
-        return AllVideos(docid:widget.docid);
+        return AllVideos(docid: widget.docid);
     }
   }
 
@@ -131,10 +134,13 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
                   fit: BoxFit.cover,
                 ),
               ),
+              // child: CircularProfileAvatar(
+              //   '$dplink',
+              //   radius: 90,
+              // ),
             ),
             RefreshIndicator(
               child: Scaffold(
-                
                 appBar: appBar,
                 body: Stack(
                   children: <Widget>[
@@ -148,8 +154,10 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
                                 children: [
 //                            SizedBox(height: 30),
                                   ListTile(
-                                    leading: Image.asset(
-                                        'assets/images/Profile-1.png'),
+                                    leading: CircularProfileAvatar(
+                                      '$dplink',
+                                      radius: 30,
+                                    ),
                                     title: Text(
                                       '$s1',
                                       style: TextStyle(
@@ -158,7 +166,6 @@ class _ChannelState extends State<Channel> with TickerProviderStateMixin {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    
                                   ),
                                   SizedBox(height: 20),
                                   Padding(

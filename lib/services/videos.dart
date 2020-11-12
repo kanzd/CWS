@@ -101,6 +101,21 @@ class Videos {
     });
   }
 
+  changeDp(file, email, document) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await Firebase.initializeApp();
+    var storage = FirebaseStorage.instance;
+    var ref = storage.ref().child('dp/${email}');
+    var upload = ref.putFile(file);
+    var uploaddata = await upload.onComplete;
+    var firestore = FirebaseFirestore.instance;
+    var doc = firestore.doc(document);
+    var link = await uploaddata.ref.getDownloadURL();
+    await doc.update({'DisplayPic': link});
+    await pref.setString('dplink', link);
+    return link;
+  }
+
   uploadByType(
       {String hashtag,
       String title,
@@ -303,7 +318,7 @@ class Videos {
     var data = await doc.get();
     var data2 = await doc2.get();
     var data3 = await doc3.get();
-    var tempdoc =  firestore.doc(pref.getStringList('your info')[3]);
+    var tempdoc = firestore.doc(pref.getStringList('your info')[3]);
     var docda = await tempdoc.get();
 
     var finald1 = data.data()['videos'];

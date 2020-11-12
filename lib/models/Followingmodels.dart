@@ -25,6 +25,9 @@ class FollowingModel {
         var data = docdata.data();
         allinfo.add({
           'docid': i,
+          'dplink': data['DisplayPic'] != null
+              ? data['DisplayPic']
+              : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
           'followers': data['followers'],
           'following': data['following '],
           'name': data['name'],

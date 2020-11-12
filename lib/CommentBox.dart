@@ -33,10 +33,16 @@ class _CommentBoxState extends State<CommentBox> {
     key.sort();
 
     for (var i in key.reversed) {
+      var tempdoc = firebase.doc(com[i]['docid']);
+      var tempdata = await tempdoc.get();
+      
       commentlist.add(CommentList(
           time: i,
           name: com[i]['name'],
           docid: com[i]['docid'],
+          dp: tempdata.data()['DisplayPic'] != null
+              ? tempdata.data()['DisplayPic']
+              : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
           comment: com[i]['comment']));
     }
     setState(() {
@@ -124,7 +130,7 @@ class _CommentBoxState extends State<CommentBox> {
                       //     ));
                       return ListTile(
                         leading: CircularProfileAvatar(
-                          'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
+                          '${commentlist[index].dp}',
                           radius: 20,
                         ),
                         title: Text('${commentlist[index].name}'),

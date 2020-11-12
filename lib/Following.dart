@@ -5,6 +5,7 @@ import 'package:newapp1/models/Followingmodels.dart';
 import 'package:newapp1/services/videos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 class Following extends StatefulWidget {
   const Following({Key key}) : super(key: key);
@@ -97,6 +98,7 @@ class _FollowingState extends State<Following> {
               if (index < allvals.length)
                 return _cardList(
                     index: index,
+                    dplink: allvals[index]['dplink'],
                     docid: allvals[index]['docid'],
                     name: allvals[index]['name'],
                     followers: allvals[index]['followers']);
@@ -138,12 +140,15 @@ class _FollowingState extends State<Following> {
     );
   }
 
-  Widget _cardList({String name, int followers, int index, String docid}) {
+  Widget _cardList({String name, int followers, int index, String docid,String dplink}) {
     print(name);
     return Container(
         height: 70,
         child: ListTile(
-            leading: Image.asset('assets/images/Profile-1.png'),
+            leading: CircularProfileAvatar(
+                                      '$dplink',
+                                      radius: 30,
+                                    ),
             title: Text(
               '$name',
               style: TextStyle(
