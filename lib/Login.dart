@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       key: key,
       backgroundColor: Colors.white,
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomPadding: false,
       body: Builder(builder: (context) {
         return Container(
           width: double.infinity,

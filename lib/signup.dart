@@ -22,7 +22,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       key: key1,
       backgroundColor: Colors.white,
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomPadding: false,
       body: Container(
         width: double.infinity,
         child: Column(
@@ -148,3 +148,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+
+
+
+
