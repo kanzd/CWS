@@ -23,6 +23,43 @@
           }
         },
         {
+          "client_id": "85199767801-qco6qif07uuakn6uvebda29mgtkjmmcc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.newapp1",
+            "certificate_hash": "52e3c876c0c6482407d0f57290ab5f3344726357"
+          }
+        },
+        {
+          "client_id": "85199767801-9fi0e1g0bi04ar415llbv2nqiorg0f1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWmexg6hnq4br_CmhrzHFpWjyyz54DaYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85199767801-9fi0e1g0bi04ar415llbv2nqiorg0f1d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85199767801:android:211d26aed5ccb4bce07a28",
+        "android_client_info": {
+          "package_name": "com.skillybaba.vidon"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "85199767801-9fi0e1g0bi04ar415llbv2nqiorg0f1d.apps.googleusercontent.com",
           "client_type": 3
         }
